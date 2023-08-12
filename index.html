@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WTF Engine</title>
+</head>
+<body>
+  <h1>WTF Engine</h1>
+  <button id="generateButton">Generate</button>
+  <p id="wtfOutput"></p>
+
+  <script>
+    const generateButton = document.getElementById('generateButton');
+    const wtfOutput = document.getElementById('wtfOutput');
+    
+    generateButton.addEventListener('click', () => {
+      fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vSugQdXKftPMGhP8PYUF01AaPNcUe1bLWDVplmrrpempS2CfWiTrPOQuSncQw1VM4q7IQF3AilwsZI3/pub?output=csv')
+        .then(response => response.text())
+        .then(data => {
+          const lines = data.split('\n');
+          const headers = lines[0].split(',');
+
+          // Find the index of each category in the headers
+          const adjectiveIndex = headers.indexOf('Adjective');
+          const raceIndex = headers.indexOf('Race');
+          const occupationIndex = headers.indexOf('Occupation');
+          const locationIndex = headers.indexOf('Location');
+          const storyhookIndex = headers.indexOf('StoryHook');
+
+          // Choose a random row (excluding the header row)
+          const randomRowIndex = Math.floor(Math.random() * (lines.length - 2)) + 1;
+          const values = lines[randomRowIndex].split(',');
+
+          // Extract values based on indices
+          const randomAdjective = values[adjectiveIndex];
+          const randomRace = values[raceIndex];
+          const randomOccupation = values[occupationIndex];
+          const randomLocation = values[locationIndex];
+          const randomStoryHook = values[storyhookIndex];
+
+          // Generate the sentence
+          const sentence = `What the f*ck is a ${randomAdjective} ${randomRace} ${randomOccupation} from ${randomLocation} that ${randomStoryHook}?`;
+          wtfOutput.textContent = sentence;
+        });
+    });
+  </script>
+</body>
+</html>
